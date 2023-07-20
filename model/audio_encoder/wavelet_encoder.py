@@ -157,7 +157,7 @@ class _WaveletResNetWithAttention(_STFTResNetWithAttention):
 
     def _inject_members(self):
         self.add_module(
-            'wavelet',
+            'fbsp',
             LinearWavelet(
                 out_features=int(round(self.n_fft / 2)) + 1 if self.onesided else self.n_fft,
                 normalized=self.normalized,
@@ -180,7 +180,7 @@ class _WaveletResNetWithAttention(_STFTResNetWithAttention):
                 pad_right = pad_length - pad_left
                 frames = F.pad(frames, [pad_left, pad_right])
 
-        spec, ttf_weights_ = self.wavelet(frames)
+        spec, ttf_weights_ = self.fbsp(frames)
 
         spec = spec.transpose(-2, -3)
         ttf_weights[x.device] = ttf_weights_
